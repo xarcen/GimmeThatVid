@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GimmeThatVid</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-view="home">
+<div class="app">
+
+  <!-- ================================================================ HOME -->
+  <section class="view view-home is-active" id="viewHome" aria-label="Home">
+    <div class="scroll home-scroll">
+      <header class="brand">
+        <div class="brand-mark">
+          <div class="brand-glow"></div>
+          <img class="brand-logo" src="logo.png" alt="" draggable="false">
+        </div>
+        <h1 class="brand-name">GimmeThatVid</h1>
+        <p class="brand-tagline">Paste a YouTube link. Get an MP4.</p>
+      </header>
+
+      <div class="field" id="field">
+        <svg class="field-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M10 14a4 4 0 0 0 5.66 0l3-3a4 4 0 0 0-5.66-5.66l-1 1"/>
+          <path d="M14 10a4 4 0 0 0-5.66 0l-3 3a4 4 0 0 0 5.66 5.66l1-1"/>
+        </svg>
+        <input class="field-input" id="linkInput" type="text" inputmode="url"
+               autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+               placeholder="Paste a YouTube link" aria-label="YouTube link">
+        <button class="field-clear" id="clearBtn" type="button" aria-label="Clear link" hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 8l8 8M16 8l-8 8"/></svg>
+        </button>
+        <button class="field-paste" id="pasteBtn" type="button">Paste</button>
+      </div>
+      <p class="field-hint" id="fieldHint" aria-live="polite"></p>
+
+      <div class="reveal" id="reveal">
+        <div class="reveal-inner">
+          <div class="notice" id="notice" role="alert" hidden>
+            <div class="notice-icon" aria-hidden="true">!</div>
+            <div class="notice-body">
+              <p class="notice-title" id="noticeTitle"></p>
+              <p class="notice-detail" id="noticeDetail"></p>
+            </div>
+            <button class="notice-action" id="noticeRetry" type="button">Try Again</button>
+          </div>
+
+          <article class="card preview" id="previewCard">
+            <div class="thumb">
+              <img class="thumb-img" id="thumbImg" alt="" draggable="false">
+              <span class="badge" id="durationBadge"></span>
+            </div>
+            <div class="preview-body">
+              <h2 class="preview-title" id="previewTitle"></h2>
+              <p class="preview-sub" id="previewSub"></p>
+              <div class="preview-actions">
+                <button class="quality-btn" id="qualityBtn" type="button" disabled
+                        aria-haspopup="listbox" aria-expanded="false" aria-controls="qualityMenu">
+                  <span class="quality-value" id="qualityLabel"></span>
+                  <svg class="quality-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="M7.5 10l4.5 4.5 4.5-4.5"/></svg>
+                </button>
+                <button class="btn btn-primary btn-download" id="downloadBtn" type="button" disabled>
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M6.5 10 12 15.5 17.5 10M5 20h14"/></svg>
+                  <span>Download</span>
+                  <span class="btn-meta" id="sizeLabel"></span>
+                </button>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <section class="recents" id="recents" hidden>
+        <h3 class="section-title">Recent</h3>
+        <ul class="recent-list" id="recentList"></ul>
+      </section>
+    </div>
+
+    <footer class="home-footer">
+      <button class="folder-chip" id="folderBtn" type="button" title="Change where videos are saved">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 7.5a2 2 0 0 1 2-2h3.6l2 2h7.4a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/></svg>
+        <span class="folder-text">Saving to <strong id="folderLabel">Downloads</strong></span>
+      </button>
+    </footer>
+  </section>
+
+  <!-- ============================================================ PROGRESS -->
+  <section class="view view-progress" id="viewProgress" aria-label="Downloading" inert>
+    <div class="ambient" id="ambient"></div>
+    <div class="vignette"></div>
+
+    <div class="progress-center">
+      <div class="ring is-busy" id="ring">
+        <div class="ring-thumb" id="ringThumb"></div>
+        <svg class="ring-svg" viewBox="0 0 220 220" aria-hidden="true">
+          <defs>
+            <linearGradient id="ringGradient" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#ff7a4d"/>
+              <stop offset="1" stop-color="#ff2419"/>
+            </linearGradient>
+          </defs>
+          <circle class="ring-track" cx="110" cy="110" r="96"/>
+          <circle class="ring-bar" id="ringBar" cx="110" cy="110" r="96"/>
+          <circle class="ring-spin" cx="110" cy="110" r="96"/>
+        </svg>
+        <div class="ring-label" aria-hidden="true">
+          <span class="ring-pct" id="ringPct">0</span><span class="ring-pct-sign">%</span>
+        </div>
+        <svg class="ring-check" viewBox="0 0 220 220" aria-hidden="true">
+          <circle class="check-disc" cx="110" cy="110" r="84"/>
+          <path class="check-path" d="M74 113l25 25 49-54"/>
+        </svg>
+      </div>
+
+      <p class="progress-stage" id="progressStage" aria-live="polite">Getting ready…</p>
+      <p class="progress-detail" id="progressDetail">&nbsp;</p>
+      <p class="progress-title" id="progressTitle"></p>
+    </div>
+
+    <footer class="progress-footer">
+      <button class="btn btn-quiet" id="cancelBtn" type="button">Cancel</button>
+    </footer>
+  </section>
+
+  <!-- ================================================================ DONE -->
+  <section class="view view-done" id="viewDone" aria-label="Saved video" inert>
+    <div class="scroll done-scroll">
+      <header class="done-head">
+        <div class="done-badge" id="doneBadge">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 12.5l4 4L18.5 7.5"/></svg>
+        </div>
+        <h2 class="done-title" id="doneTitle">Saved</h2>
+      </header>
+
+      <div class="player">
+        <img class="player-art" id="playerArt" alt="" draggable="false" hidden>
+        <video id="player" controls preload="metadata" playsinline></video>
+      </div>
+
+      <div class="file">
+        <div class="file-icon" aria-hidden="true"><span id="fileExt">MP4</span></div>
+        <div class="file-text">
+          <p class="file-name" id="fileName"></p>
+          <p class="file-sub" id="fileSub"></p>
+        </div>
+      </div>
+
+      <div class="done-actions">
+        <button class="btn btn-primary" id="playBtn" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path class="fill" d="M8 5.8v12.4a.8.8 0 0 0 1.2.7l9.9-6.2a.8.8 0 0 0 0-1.4L9.2 5.1A.8.8 0 0 0 8 5.8z"/></svg>
+          Play
+        </button>
+        <button class="btn btn-secondary" id="revealBtn" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 7.5a2 2 0 0 1 2-2h3.6l2 2h7.4a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/></svg>
+          Show in Folder
+        </button>
+      </div>
+    </div>
+
+    <footer class="done-footer">
+      <button class="btn btn-quiet" id="againBtn" type="button">Download Another</button>
+    </footer>
+  </section>
+
+  <!-- Lives outside the card: the card clips its contents to its rounded corners. -->
+  <div class="menu" id="qualityMenu" role="listbox" aria-label="Quality"></div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

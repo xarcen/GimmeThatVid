@@ -1,0 +1,7 @@
+# App
+yt-dlp>=2026.8.19
+pywebview>=6.2
+
+# Screenshots in tools/smoke_test.py, and tools/build_assets.py
+Pillow>=12.0
+numpy

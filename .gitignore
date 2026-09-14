@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.pyc
+
+# Build output (the installer is published as a GitHub Release instead)
+installer/build/
+installer/dist/
+installer/installed-app.png
+
+# Machine-specific shortcut made by tools/make_shortcut.ps1
+GimmeThatVid.lnk
+
+# Test output
+report.json
+*.log
